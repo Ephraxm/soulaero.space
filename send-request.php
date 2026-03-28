@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-$redirectBase = 'requests.html';
+$redirectBase = 'requests';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: ' . $redirectBase);

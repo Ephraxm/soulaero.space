@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Custom Requests</title>
+	<style>
+		:root {
+			--xp-blue-1: #0a246a;
+			--xp-blue-2: #3a6ea5;
+			--xp-blue-3: #6fa8dc;
+			--xp-win-bg: #ece9d8;
+			--xp-panel: #f4f1e6;
+			--xp-border-dark: #808080;
+			--xp-border-light: #ffffff;
+			--xp-text: #000000;
+			--xp-muted: #2f4f76;
+			--xp-task-a: #1f69d8;
+			--xp-task-b: #0d4fad;
+			--xp-green-a: #4e9a06;
+			--xp-green-b: #2f7600;
+			--ok-bg: #dff6db;
+			--ok-line: #7bb36d;
+			--ok-text: #1f4f1f;
+			--err-bg: #f9dddd;
+			--err-line: #c76c6c;
+			--err-text: #6a1f1f;
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			min-height: 100vh;
+			font-family: Tahoma, Verdana, Arial, sans-serif;
+			color: var(--xp-text);
+			background: #2e8bc2 url("../about-bg.jpg") center center / cover no-repeat fixed;
+			padding: 24px 24px 68px;
+		}
+
+		.desktop-icons {
+			position: fixed;
+			top: 24px;
+			left: 16px;
+			display: grid;
+			gap: 16px;
+			z-index: 2;
+		}
+
+		.desktop-icon {
+			width: 78px;
+			text-align: center;
+			font-size: 11px;
+			line-height: 1.25;
+			color: #ffffff;
+			text-shadow: 1px 1px 1px #0b2e5f;
+		}
+
+		.desktop-icon::before {
+			content: "";
+			display: block;
+			width: 32px;
+			height: 32px;
+			margin: 0 auto 4px;
+			background: linear-gradient(180deg, #fffbe0, #f4d97d);
+			border: 1px solid rgba(22, 41, 80, 0.75);
+			box-shadow: inset 1px 1px #fff, inset -1px -1px rgba(0, 0, 0, 0.2);
+		}
+
+		.page {
+			position: relative;
+			z-index: 3;
+			max-width: 980px;
+			margin: 0 auto;
+			background: var(--xp-win-bg);
+			border: 1px solid var(--xp-border-dark);
+			box-shadow: 1px 1px 0 var(--xp-border-light), -1px -1px 0 #b7b3a2, 4px 4px 18px rgba(7, 23, 40, 0.35);
+			overflow: hidden;
+		}
+
+		.topbar {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 5px 7px;
+			background: linear-gradient(180deg, var(--xp-blue-3) 0%, var(--xp-blue-2) 42%, var(--xp-blue-1) 100%);
+			color: #ffffff;
+			border-bottom: 1px solid #0a2f66;
+		}
+
+		.brand {
+			font-weight: 700;
+			font-size: 13px;
+			letter-spacing: 0.2px;
+			text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.45);
+		}
+
+		.back-link {
+			text-decoration: none;
+			font-size: 11px;
+			font-weight: 700;
+			padding: 4px 10px;
+			color: #000;
+			background: linear-gradient(180deg, #ffffff, #dbd7c7);
+			border: 1px solid #8a887d;
+			box-shadow: inset 1px 1px #fff, inset -1px -1px #b4af9f;
+		}
+
+		.back-link:hover {
+			background: linear-gradient(180deg, #fffde9, #dad5c5);
+		}
+
+		.hero {
+			padding: 12px;
+			display: grid;
+			gap: 7px;
+			background: #f8f7f1;
+			border-bottom: 1px solid #c7c2b0;
+		}
+
+		.hero h1 {
+			font-size: clamp(1.3rem, 3vw, 1.8rem);
+			line-height: 1.16;
+			color: #123f72;
+		}
+
+		.hero p {
+			color: var(--xp-muted);
+			line-height: 1.45;
+			font-size: 12px;
+			max-width: 72ch;
+		}
+
+		.status {
+			margin: 12px;
+			padding: 8px 10px;
+			font-weight: 700;
+			display: none;
+			font-size: 12px;
+			border: 1px solid;
+			box-shadow: inset 1px 1px #fff;
+		}
+
+		.status.success {
+			display: block;
+			background: var(--ok-bg);
+			color: var(--ok-text);
+			border-color: var(--ok-line);
+		}
+
+		.status.error {
+			display: block;
+			background: var(--err-bg);
+			color: var(--err-text);
+			border-color: var(--err-line);
+		}
+
+		form {
+			padding: 12px;
+			display: grid;
+			gap: 10px;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			background: var(--xp-win-bg);
+		}
+
+		.field {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+		}
+
+		.field-full {
+			grid-column: 1 / -1;
+		}
+
+		label {
+			font-weight: 700;
+			color: #103962;
+			font-size: 12px;
+		}
+
+		input,
+		select,
+		textarea {
+			border: 1px solid #8c8a7f;
+			padding: 7px 8px;
+			font-size: 12px;
+			color: #1c3657;
+			background: #ffffff;
+			box-shadow: inset 1px 1px #d7d3c5;
+		}
+
+		textarea {
+			min-height: 138px;
+			resize: vertical;
+			line-height: 1.45;
+		}
+
+		input:focus,
+		select:focus,
+		textarea:focus {
+			outline: 1px dotted #1f5ca8;
+			outline-offset: 1px;
+		}
+
+		.hint {
+			color: #395f8c;
+			font-size: 11px;
+		}
+
+		.file-error {
+			color: var(--err-text);
+			font-size: 11px;
+			display: none;
+			font-weight: 700;
+		}
+
+		.file-error.show {
+			display: block;
+		}
+
+		.actions {
+			grid-column: 1 / -1;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 10px;
+			padding-top: 8px;
+			border-top: 1px solid #c6c1b0;
+		}
+
+		.submit-btn {
+			border: 1px solid #8a887d;
+			background: linear-gradient(180deg, #ffffff, #dbd7c7);
+			color: #000;
+			font-weight: 700;
+			font-size: 12px;
+			padding: 7px 14px;
+			cursor: pointer;
+			box-shadow: inset 1px 1px #fff, inset -1px -1px #b4af9f;
+		}
+
+		.submit-btn:hover {
+			background: linear-gradient(180deg, #fffde9, #dad5c5);
+		}
+
+		.hidden-field {
+			position: absolute;
+			left: -10000px;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+		}
+
+		.status-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 8px;
+			padding: 8px 10px;
+			border-top: 1px solid #bfb9a6;
+			background: #e7e3d5;
+			font-size: 11px;
+			color: #2d4566;
+		}
+
+		.taskbar {
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: 44px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 8px;
+			background: linear-gradient(180deg, var(--xp-task-a), var(--xp-task-b));
+			border-top: 1px solid #6ea8ea;
+			z-index: 6;
+		}
+
+		.start-btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 7px;
+			padding: 6px 14px;
+			border-radius: 17px;
+			border: 1px solid #2f7000;
+			color: #fff;
+			font-style: italic;
+			font-weight: 700;
+			font-size: 15px;
+			background: linear-gradient(180deg, var(--xp-green-a), var(--xp-green-b));
+			box-shadow: inset 1px 1px rgba(255, 255, 255, 0.4);
+		}
+
+		.task-info {
+			background: rgba(255, 255, 255, 0.18);
+			border: 1px solid rgba(255, 255, 255, 0.35);
+			color: #e8f3ff;
+			padding: 4px 10px;
+			font-size: 11px;
+		}
+
+		@media (max-width: 940px) {
+			form {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		@media (max-width: 560px) {
+			body {
+				padding: 10px 10px 60px;
+			}
+
+			.actions {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			.desktop-icons {
+				display: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="desktop-icons" aria-hidden="true">
+		<div class="desktop-icon">My Computer</div>
+		<div class="desktop-icon">Requests</div>
+		<div class="desktop-icon">Mail</div>
+	</div>
+
+	<main class="page">
+		<header class="topbar">
+			<div class="brand">Custom Request Form</div>
+			<a class="back-link" href="/">Back</a>
+		</header>
+
+		<section class="hero">
+			<h1>Send A Custom Clothing Request</h1>
+			<p>Fill out the form below and your request details will be emailed directly for review.</p>
+		</section>
+
+		<div class="status" id="statusMessage"></div>
+
+		<form action="https://formsubmit.co/soulaero.space@gmail.com" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="_subject" value="New Custom Request Submission">
+			<input type="hidden" name="_captcha" value="false">
+			<input type="hidden" name="_template" value="table">
+			<input type="hidden" name="_next" value="https://soulaero.space/requests?status=success">
+			<div class="field">
+				<label for="name">Your Name</label>
+				<input id="name" name="name" type="text" maxlength="80" required>
+			</div>
+
+			<div class="field">
+				<label for="email">Email</label>
+				<input id="email" name="email" type="email" maxlength="120" required>
+			</div>
+
+			<div class="field">
+				<label for="requestType">Request Type</label>
+				<select id="requestType" name="request_type" required>
+					<option value="" selected disabled>Select one</option>
+					<option value="Vest">Vest</option>
+					<option value="Jumper">Jumper</option>
+					<option value="T-shirt">T-shirt</option>
+					<option value="Other (write below)">Other</option>
+				</select>
+			</div>
+
+			<div class="field">
+				<label for="budget">Budget</label>
+				<input id="budget" name="budget" type="text" maxlength="30" placeholder="e.g. 30 - 100">
+			</div>
+
+			<div class="field field-full">
+				<label for="details">Request Details</label>
+				<textarea id="details" name="details" required placeholder="Describe exactly what you need, style references, features, and anything important."></textarea>
+			</div>
+
+			<div class="field field-full">
+				<label for="referenceImage">Attach Reference Image (optional)</label>
+				<input id="referenceImage" name="attachment" type="file" accept="image/*" multiple>
+				<p class="hint">Accepted: image files only, up to 3 images.</p>
+				<p class="file-error" id="fileError">Please select up to 3 images only.</p>
+			</div>
+
+			<div class="hidden-field" aria-hidden="true">
+				<label for="website">Leave this field blank</label>
+				<input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+			</div>
+
+			<div class="actions">
+				<p class="hint">You can send your own clothes to be modified.</p>
+				<button class="submit-btn" type="submit">Send Request</button>
+			</div>
+		</form>
+
+		<footer class="status-row">
+			<span>Ready</span>
+			<span>Request Window</span>
+		</footer>
+	</main>
+
+	<div class="taskbar" aria-hidden="true">
+		<div class="start-btn">start</div>
+		<div class="task-info">Custom Requests</div>
+	</div>
+
+	<script>
+		(function () {
+			var statusEl = document.getElementById('statusMessage');
+			var formEl = document.querySelector('form');
+			var fileInputEl = document.getElementById('referenceImage');
+			var fileErrorEl = document.getElementById('fileError');
+			var params = new URLSearchParams(window.location.search);
+			var status = params.get('status');
+
+			if (status === 'success') {
+				statusEl.className = 'status success';
+				statusEl.textContent = 'Request sent successfully. I will get back to you soon.';
+			} else if (status === 'error') {
+				statusEl.className = 'status error';
+				statusEl.textContent = 'Could not send request email. Please try again.';
+			} else if (status === 'invalid') {
+				statusEl.className = 'status error';
+				statusEl.textContent = 'Please complete all required fields before submitting.';
+			}
+
+			formEl.addEventListener('submit', function (event) {
+				var files = fileInputEl.files;
+				if (files && files.length > 3) {
+					event.preventDefault();
+					fileErrorEl.classList.add('show');
+					return;
+				}
+
+				fileErrorEl.classList.remove('show');
+			});
+
+			fileInputEl.addEventListener('change', function () {
+				if (fileInputEl.files && fileInputEl.files.length <= 3) {
+					fileErrorEl.classList.remove('show');
+				}
+			});
+		})();
+	</script>
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>About Me</title>
+	<style>
+		:root {
+			--xp-blue-1: #0a246a;
+			--xp-blue-2: #3a6ea5;
+			--xp-blue-3: #6fa8dc;
+			--xp-win-bg: #ece9d8;
+			--xp-panel: #f4f1e6;
+			--xp-border-dark: #808080;
+			--xp-border-light: #ffffff;
+			--xp-text: #000000;
+			--xp-muted: #2f4f76;
+			--xp-task-a: #1f69d8;
+			--xp-task-b: #0d4fad;
+			--xp-green-a: #4e9a06;
+			--xp-green-b: #2f7600;
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			min-height: 100vh;
+			font-family: Tahoma, Verdana, Arial, sans-serif;
+			color: var(--xp-text);
+			background: #2e8bc2 url("../about-bg.jpg") center center / cover no-repeat fixed;
+			padding: 24px 24px 68px;
+		}
+
+		.desktop-icons {
+			position: fixed;
+			top: 24px;
+			left: 16px;
+			display: grid;
+			gap: 16px;
+			z-index: 2;
+		}
+
+		.desktop-icon {
+			width: 78px;
+			text-align: center;
+			font-size: 11px;
+			line-height: 1.25;
+			color: #ffffff;
+			text-shadow: 1px 1px 1px #0b2e5f;
+		}
+
+		.desktop-icon::before {
+			content: "";
+			display: block;
+			width: 32px;
+			height: 32px;
+			margin: 0 auto 4px;
+			background: linear-gradient(180deg, #fffbe0, #f4d97d);
+			border: 1px solid rgba(22, 41, 80, 0.75);
+			box-shadow: inset 1px 1px #fff, inset -1px -1px rgba(0, 0, 0, 0.2);
+		}
+
+		.page {
+			position: relative;
+			z-index: 3;
+			max-width: 980px;
+			margin: 0 auto;
+			background: var(--xp-win-bg);
+			border: 1px solid var(--xp-border-dark);
+			box-shadow: 1px 1px 0 var(--xp-border-light), -1px -1px 0 #b7b3a2, 4px 4px 18px rgba(7, 23, 40, 0.35);
+			overflow: hidden;
+		}
+
+		.topbar {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 5px 7px;
+			background: linear-gradient(180deg, var(--xp-blue-3) 0%, var(--xp-blue-2) 42%, var(--xp-blue-1) 100%);
+			color: #ffffff;
+			border-bottom: 1px solid #0a2f66;
+		}
+
+		.brand {
+			font-weight: 700;
+			font-size: 13px;
+			letter-spacing: 0.2px;
+			text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.45);
+		}
+
+		.back-link {
+			text-decoration: none;
+			font-size: 11px;
+			font-weight: 700;
+			padding: 4px 10px;
+			color: #000;
+			background: linear-gradient(180deg, #ffffff, #dbd7c7);
+			border: 1px solid #8a887d;
+			box-shadow: inset 1px 1px #fff, inset -1px -1px #b4af9f;
+		}
+
+		.back-link:hover {
+			background: linear-gradient(180deg, #fffde9, #dad5c5);
+		}
+
+		.hero {
+			padding: 14px;
+			display: grid;
+			grid-template-columns: 188px 1fr;
+			gap: 14px;
+			align-items: center;
+			background: #f8f7f1;
+			border-bottom: 1px solid #c7c2b0;
+		}
+
+		.avatar {
+			width: 188px;
+			height: 188px;
+			border: 1px solid #8e8b7f;
+			background: linear-gradient(180deg, #e5f1ff, #b7d2f0);
+			display: grid;
+			place-items: center;
+			overflow: hidden;
+			color: #1a4c82;
+			font-size: 12px;
+			text-align: center;
+			padding: 10px;
+			box-shadow: inset 1px 1px #ffffff, inset -1px -1px #a9bcd1;
+		}
+
+		.avatar img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			display: block;
+		}
+
+		.hero h1 {
+			font-size: clamp(1.5rem, 3vw, 2.1rem);
+			line-height: 1.16;
+			margin-bottom: 6px;
+			color: #123f72;
+		}
+
+		.hero p {
+			color: var(--xp-muted);
+			max-width: 64ch;
+			line-height: 1.45;
+			font-size: 13px;
+		}
+
+		.layout {
+			display: grid;
+			grid-template-columns: 1.4fr 1fr;
+			gap: 12px;
+			padding: 12px;
+			background: var(--xp-win-bg);
+		}
+
+		.card {
+			border: 1px solid #8f8c80;
+			background: var(--xp-panel);
+			padding: 10px;
+			box-shadow: inset 1px 1px #fff, inset -1px -1px #b7b3a5;
+		}
+
+		.card h2 {
+			font-size: 13px;
+			margin-bottom: 8px;
+			padding: 4px 6px;
+			background: linear-gradient(180deg, #dcebff, #bfd8fb);
+			border: 1px solid #91a2b8;
+		}
+
+		.card p {
+			color: #1c3657;
+			line-height: 1.45;
+			font-size: 12px;
+			margin-bottom: 8px;
+		}
+
+		.info-list,
+		.social-list,
+		.interest-list {
+			list-style: none;
+			display: grid;
+			gap: 9px;
+		}
+
+		.info-list li {
+			color: #213e63;
+			display: flex;
+			justify-content: space-between;
+			gap: 10px;
+			border-bottom: 1px solid #c9c4b4;
+			padding: 5px 2px;
+			font-size: 12px;
+		}
+
+		.info-list span:first-child {
+			color: #0e315c;
+			font-weight: 700;
+		}
+
+		.social-list a {
+			text-decoration: none;
+			color: #113f75;
+			background: linear-gradient(180deg, #ffffff, #e7edf7);
+			border: 1px solid #8fa1b6;
+			padding: 7px 8px;
+			display: block;
+			font-weight: 700;
+			font-size: 12px;
+			box-shadow: inset 1px 1px #fff, inset -1px -1px #b0c1d3;
+		}
+
+		.social-list a:hover {
+			background: linear-gradient(180deg, #fefefe, #dce7f7);
+		}
+
+		.interest-list {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 6px;
+		}
+
+		.interest-list li {
+			border: 1px solid #94a4ba;
+			background: linear-gradient(180deg, #ffffff, #d9e4f2);
+			text-align: center;
+			padding: 6px 8px;
+			color: #254a77;
+			font-size: 11px;
+			font-weight: 600;
+			border-radius: 2px;
+		}
+
+		.status-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 8px;
+			padding: 8px 10px;
+			border-top: 1px solid #bfb9a6;
+			background: #e7e3d5;
+			font-size: 11px;
+			color: #2d4566;
+		}
+
+		.taskbar {
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: 44px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 8px;
+			background: linear-gradient(180deg, var(--xp-task-a), var(--xp-task-b));
+			border-top: 1px solid #6ea8ea;
+			z-index: 6;
+		}
+
+		.start-btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 7px;
+			padding: 6px 14px;
+			border-radius: 17px;
+			border: 1px solid #2f7000;
+			color: #fff;
+			font-style: italic;
+			font-weight: 700;
+			font-size: 15px;
+			background: linear-gradient(180deg, var(--xp-green-a), var(--xp-green-b));
+			box-shadow: inset 1px 1px rgba(255, 255, 255, 0.4);
+		}
+
+		.task-info {
+			background: rgba(255, 255, 255, 0.18);
+			border: 1px solid rgba(255, 255, 255, 0.35);
+			color: #e8f3ff;
+			padding: 4px 10px;
+			font-size: 11px;
+		}
+
+		@media (max-width: 940px) {
+			.hero {
+				grid-template-columns: 1fr;
+			}
+
+			.avatar {
+				width: 188px;
+				height: 188px;
+				flex-shrink: 0;
+			}
+
+			.layout {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		@media (max-width: 560px) {
+			body {
+				padding: 10px 10px 60px;
+			}
+
+			.interest-list {
+				grid-template-columns: 1fr;
+			}
+
+			.info-list li {
+				flex-direction: column;
+				gap: 4px;
+			}
+
+			.desktop-icons {
+				display: none;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="desktop-icons" aria-hidden="true">
+		<div class="desktop-icon">My Computer</div>
+		<div class="desktop-icon">My Socials</div>
+		<div class="desktop-icon">Portfolio</div>
+	</div>
+
+	<main class="page">
+		<header class="topbar">
+			<div class="brand">About Me</div>
+			<a class="back-link" href="/">Back</a>
+		</header>
+
+		<section class="hero">
+			<div class="avatar" id="avatarLabel">Your Photo Placeholder</div>
+			<div>
+				<h1 id="profileName">Your Name</h1>
+				<p id="profileTagline">Write a short intro that explains who you are and what you do.</p>
+			</div>
+		</section>
+
+		<section class="layout">
+			<article class="card">
+				<h2>About</h2>
+				<div id="bioBlock"></div>
+
+				<h2>Interests</h2>
+				<ul class="interest-list" id="interestList"></ul>
+			</article>
+
+			<aside class="card">
+				<h2>Quick Info</h2>
+				<ul class="info-list" id="infoList"></ul>
+
+				<h2>Socials</h2>
+				<ul class="social-list" id="socialList"></ul>
+			</aside>
+		</section>
+
+		<footer class="status-row">
+			<span>Ready</span>
+			<span></span>
+		</footer>
+	</main>
+
+	<div class="taskbar" aria-hidden="true">
+		<div class="start-btn">start</div>
+		<div class="task-info">About Me Window</div>
+	</div>
+
+	<script>
+		const ABOUT_DATA = {
+			name: 'Khadija',
+			tagline: 'Super cool',
+			avatarImage: '../pfp.jpg',
+			avatarText: 'Add your image here',
+			bio: [
+				'Hi!! My name is Khadija and I\'m from Cambridgeshire. I started creating custom designs on Vinted and decided it was time to launch my own website! I\'ve always loved fashion and art, so I really enjoy designing unique pieces for others. Every order is made with care and creativity 💫',
+				'I\'m currently an A-level student, so I take a maximum of 7 orders per week. This may change during exam season, but I\'ll always keep you updated. If you have any questions, feel free to email me ;p'
+			],
+			info: {
+				Location: 'Cambridgeshire, UK',
+				Email: 'business.khadija@gmail.com',
+				Availability: 'Open to requests'
+			},
+			interests: ['Skateboarding', 'Photography', 'Art', 'Tennis'],
+			socials: [
+				{ label: 'Instagram', url: 'https://www.instagram.com/cacadijaa/' },
+				{ label: 'TikTok', url: 'https://www.tiktok.com/@cacadija' }
+			]
+		};
+
+		function renderAboutPage() {
+			document.getElementById('profileName').textContent = ABOUT_DATA.name;
+			document.getElementById('profileTagline').textContent = ABOUT_DATA.tagline;
+
+			const avatarLabel = document.getElementById('avatarLabel');
+			if (ABOUT_DATA.avatarImage) {
+				avatarLabel.innerHTML = '<img src="' + ABOUT_DATA.avatarImage + '" alt="Profile picture">';
+			} else {
+				avatarLabel.textContent = ABOUT_DATA.avatarText;
+			}
+
+			const bioBlock = document.getElementById('bioBlock');
+			bioBlock.innerHTML = ABOUT_DATA.bio
+				.map((paragraph) => '<p>' + paragraph + '</p>')
+				.join('');
+
+			const infoList = document.getElementById('infoList');
+			infoList.innerHTML = Object.entries(ABOUT_DATA.info)
+				.map(([key, value]) => '<li><span>' + key + '</span><span>' + value + '</span></li>')
+				.join('');
+
+			const interestList = document.getElementById('interestList');
+			interestList.innerHTML = ABOUT_DATA.interests
+				.map((item) => '<li>' + item + '</li>')
+				.join('');
+
+			const socialList = document.getElementById('socialList');
+			socialList.innerHTML = ABOUT_DATA.socials
+				.map((social) => (
+					'<li><a href="' + social.url + '" target="_blank" rel="noreferrer noopener">' + social.label + '</a></li>'
+				))
+				.join('');
+		}
+
+		renderAboutPage();
+	</script>
+</body>
+</html>

@@ -142,13 +142,30 @@ nav a:hover {
 .footer {
   width: 100%;
   height: calc(100vw * 0.303);
+  min-height: 180px;
+  position: relative;
+  background: #2858e3;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: clamp(6px, 1.8vw, 24px);
+  padding-right: clamp(18px, 7vw, 120px);
+}
 
-  background: url("bottom.png") no-repeat center;
-  background-size: contain;
+.footer-logo {
+  width: clamp(195px, 30vw, 390px);
+  height: auto;
+  object-fit: contain;
+}
 
-  opacity: 0;
-  transform: translateY(40px);
-  transition: all 0.8s ease;
+.footer-contact {
+  position: absolute;
+  right: clamp(12px, 3vw, 36px);
+  bottom: clamp(10px, 2vw, 20px);
+  margin: 0;
+  font-size: clamp(16px, 1.9vw, 24px);
+  color: #000000;
+  text-align: right;
 }
 
 
@@ -261,6 +278,19 @@ nav a:hover {
 
   .footer {
     height: calc(100vw * 0.35);
+    min-height: 120px;
+    padding-left: 8px;
+    padding-right: 18px;
+  }
+
+  .footer-logo {
+    width: clamp(165px, 51vw, 270px);
+  }
+
+  .footer-contact {
+    right: 10px;
+    bottom: 8px;
+    font-size: 14px;
   }
 }
 

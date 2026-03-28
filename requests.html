@@ -6,17 +6,25 @@
 	<title>Custom Requests</title>
 	<style>
 		:root {
-			--bg: #0b1220;
-			--panel: #f8fafc;
-			--text: #0f172a;
-			--muted: #475569;
-			--line: #dbe3ef;
-			--accent: #0ea5e9;
-			--accent-dark: #0369a1;
-			--ok-bg: #dcfce7;
-			--ok-text: #166534;
-			--err-bg: #fee2e2;
-			--err-text: #991b1b;
+			--xp-blue-1: #0a246a;
+			--xp-blue-2: #3a6ea5;
+			--xp-blue-3: #6fa8dc;
+			--xp-win-bg: #ece9d8;
+			--xp-panel: #f4f1e6;
+			--xp-border-dark: #808080;
+			--xp-border-light: #ffffff;
+			--xp-text: #000000;
+			--xp-muted: #2f4f76;
+			--xp-task-a: #1f69d8;
+			--xp-task-b: #0d4fad;
+			--xp-green-a: #4e9a06;
+			--xp-green-b: #2f7600;
+			--ok-bg: #dff6db;
+			--ok-line: #7bb36d;
+			--ok-text: #1f4f1f;
+			--err-bg: #f9dddd;
+			--err-line: #c76c6c;
+			--err-text: #6a1f1f;
 		}
 
 		* {
@@ -27,100 +35,141 @@
 
 		body {
 			min-height: 100vh;
-			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-			color: var(--text);
-			background:
-				radial-gradient(circle at 15% 15%, rgba(14, 165, 233, 0.32), transparent 35%),
-				radial-gradient(circle at 80% 10%, rgba(56, 189, 248, 0.22), transparent 30%),
-				linear-gradient(135deg, #020617, var(--bg));
-			padding: 18px;
+			font-family: Tahoma, Verdana, Arial, sans-serif;
+			color: var(--xp-text);
+			background: #2e8bc2 url("about-bg.jpg") center center / cover no-repeat fixed;
+			padding: 24px 24px 68px;
 		}
 
-		.container {
-			max-width: 920px;
+		.desktop-icons {
+			position: fixed;
+			top: 24px;
+			left: 16px;
+			display: grid;
+			gap: 16px;
+			z-index: 2;
+		}
+
+		.desktop-icon {
+			width: 78px;
+			text-align: center;
+			font-size: 11px;
+			line-height: 1.25;
+			color: #ffffff;
+			text-shadow: 1px 1px 1px #0b2e5f;
+		}
+
+		.desktop-icon::before {
+			content: "";
+			display: block;
+			width: 32px;
+			height: 32px;
+			margin: 0 auto 4px;
+			background: linear-gradient(180deg, #fffbe0, #f4d97d);
+			border: 1px solid rgba(22, 41, 80, 0.75);
+			box-shadow: inset 1px 1px #fff, inset -1px -1px rgba(0, 0, 0, 0.2);
+		}
+
+		.page {
+			position: relative;
+			z-index: 3;
+			max-width: 980px;
 			margin: 0 auto;
-			background: rgba(248, 250, 252, 0.98);
-			border: 1px solid rgba(148, 163, 184, 0.28);
-			border-radius: 20px;
+			background: var(--xp-win-bg);
+			border: 1px solid var(--xp-border-dark);
+			box-shadow: 1px 1px 0 var(--xp-border-light), -1px -1px 0 #b7b3a2, 4px 4px 18px rgba(7, 23, 40, 0.35);
 			overflow: hidden;
-			box-shadow: 0 20px 45px rgba(2, 6, 23, 0.35);
 		}
 
-		.header {
-			padding: 24px;
-			border-bottom: 1px solid var(--line);
+		.topbar {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			gap: 16px;
-			background: linear-gradient(180deg, #ffffff, #f8fafc);
+			padding: 5px 7px;
+			background: linear-gradient(180deg, var(--xp-blue-3) 0%, var(--xp-blue-2) 42%, var(--xp-blue-1) 100%);
+			color: #ffffff;
+			border-bottom: 1px solid #0a2f66;
 		}
 
-		.header h1 {
-			font-size: 1.65rem;
-			margin-bottom: 6px;
-		}
-
-		.header p {
-			color: var(--muted);
+		.brand {
+			font-weight: 700;
+			font-size: 13px;
+			letter-spacing: 0.2px;
+			text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.45);
 		}
 
 		.back-link {
 			text-decoration: none;
-			background: var(--accent);
-			color: #fff;
-			border-radius: 10px;
-			padding: 10px 14px;
+			font-size: 11px;
 			font-weight: 700;
+			padding: 4px 10px;
+			color: #000;
+			background: linear-gradient(180deg, #ffffff, #dbd7c7);
+			border: 1px solid #8a887d;
+			box-shadow: inset 1px 1px #fff, inset -1px -1px #b4af9f;
 		}
 
 		.back-link:hover {
-			background: var(--accent-dark);
+			background: linear-gradient(180deg, #fffde9, #dad5c5);
+		}
+
+		.hero {
+			padding: 12px;
+			display: grid;
+			gap: 7px;
+			background: #f8f7f1;
+			border-bottom: 1px solid #c7c2b0;
+		}
+
+		.hero h1 {
+			font-size: clamp(1.3rem, 3vw, 1.8rem);
+			line-height: 1.16;
+			color: #123f72;
+		}
+
+		.hero p {
+			color: var(--xp-muted);
+			line-height: 1.45;
+			font-size: 12px;
+			max-width: 72ch;
 		}
 
 		.status {
-			margin: 18px 24px 0;
-			padding: 12px 14px;
-			border-radius: 10px;
-			font-weight: 600;
+			margin: 12px;
+			padding: 8px 10px;
+			font-weight: 700;
 			display: none;
+			font-size: 12px;
+			border: 1px solid;
+			box-shadow: inset 1px 1px #fff;
 		}
 
 		.status.success {
 			display: block;
 			background: var(--ok-bg);
 			color: var(--ok-text);
-			border: 1px solid #86efac;
+			border-color: var(--ok-line);
 		}
 
 		.status.error {
 			display: block;
 			background: var(--err-bg);
 			color: var(--err-text);
-			border: 1px solid #fca5a5;
-		}
-
-		.file-error {
-			color: var(--err-text);
-			font-size: 0.86rem;
-			display: none;
-		}
-
-		.file-error.show {
-			display: block;
+			border-color: var(--err-line);
 		}
 
 		form {
-			padding: 22px 24px 24px;
+			padding: 12px;
 			display: grid;
-			gap: 14px;
+			gap: 10px;
 			grid-template-columns: repeat(2, minmax(0, 1fr));
+			background: var(--xp-win-bg);
 		}
 
 		.field {
 			display: flex;
 			flex-direction: column;
-			gap: 7px;
+			gap: 5px;
 		}
 
 		.field-full {
@@ -128,39 +177,49 @@
 		}
 
 		label {
-			font-weight: 600;
-			color: #1e293b;
-			font-size: 0.95rem;
+			font-weight: 700;
+			color: #103962;
+			font-size: 12px;
 		}
 
 		input,
 		select,
 		textarea {
-			border: 1px solid var(--line);
-			border-radius: 10px;
-			padding: 10px 12px;
-			font-size: 0.96rem;
-			color: var(--text);
-			background: #fff;
+			border: 1px solid #8c8a7f;
+			padding: 7px 8px;
+			font-size: 12px;
+			color: #1c3657;
+			background: #ffffff;
+			box-shadow: inset 1px 1px #d7d3c5;
 		}
 
 		textarea {
-			min-height: 150px;
+			min-height: 138px;
 			resize: vertical;
-			line-height: 1.4;
+			line-height: 1.45;
 		}
 
 		input:focus,
 		select:focus,
 		textarea:focus {
-			outline: 2px solid rgba(14, 165, 233, 0.35);
+			outline: 1px dotted #1f5ca8;
 			outline-offset: 1px;
-			border-color: #7dd3fc;
 		}
 
 		.hint {
-			color: var(--muted);
-			font-size: 0.88rem;
+			color: #395f8c;
+			font-size: 11px;
+		}
+
+		.file-error {
+			color: var(--err-text);
+			font-size: 11px;
+			display: none;
+			font-weight: 700;
+		}
+
+		.file-error.show {
+			display: block;
 		}
 
 		.actions {
@@ -168,24 +227,24 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			gap: 12px;
-			margin-top: 2px;
-			padding-top: 10px;
-			border-top: 1px dashed var(--line);
+			gap: 10px;
+			padding-top: 8px;
+			border-top: 1px solid #c6c1b0;
 		}
 
 		.submit-btn {
-			border: 0;
-			border-radius: 10px;
-			background: #0f172a;
-			color: #fff;
+			border: 1px solid #8a887d;
+			background: linear-gradient(180deg, #ffffff, #dbd7c7);
+			color: #000;
 			font-weight: 700;
-			padding: 11px 16px;
+			font-size: 12px;
+			padding: 7px 14px;
 			cursor: pointer;
+			box-shadow: inset 1px 1px #fff, inset -1px -1px #b4af9f;
 		}
 
 		.submit-btn:hover {
-			background: #111827;
+			background: linear-gradient(180deg, #fffde9, #dad5c5);
 		}
 
 		.hidden-field {
@@ -196,36 +255,95 @@
 			overflow: hidden;
 		}
 
-		@media (max-width: 740px) {
-			body {
-				padding: 10px;
-			}
+		.status-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 8px;
+			padding: 8px 10px;
+			border-top: 1px solid #bfb9a6;
+			background: #e7e3d5;
+			font-size: 11px;
+			color: #2d4566;
+		}
 
-			.header {
-				flex-direction: column;
-				align-items: flex-start;
-			}
+		.taskbar {
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: 44px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 8px;
+			background: linear-gradient(180deg, var(--xp-task-a), var(--xp-task-b));
+			border-top: 1px solid #6ea8ea;
+			z-index: 6;
+		}
 
+		.start-btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 7px;
+			padding: 6px 14px;
+			border-radius: 17px;
+			border: 1px solid #2f7000;
+			color: #fff;
+			font-style: italic;
+			font-weight: 700;
+			font-size: 15px;
+			background: linear-gradient(180deg, var(--xp-green-a), var(--xp-green-b));
+			box-shadow: inset 1px 1px rgba(255, 255, 255, 0.4);
+		}
+
+		.task-info {
+			background: rgba(255, 255, 255, 0.18);
+			border: 1px solid rgba(255, 255, 255, 0.35);
+			color: #e8f3ff;
+			padding: 4px 10px;
+			font-size: 11px;
+		}
+
+		@media (max-width: 940px) {
 			form {
 				grid-template-columns: 1fr;
+			}
+		}
+
+		@media (max-width: 560px) {
+			body {
+				padding: 10px 10px 60px;
 			}
 
 			.actions {
 				flex-direction: column;
 				align-items: flex-start;
 			}
+
+			.desktop-icons {
+				display: none;
+			}
 		}
 	</style>
 </head>
 <body>
-	<main class="container">
-		<header class="header">
-			<div>
-				<h1>Custom Request Form</h1>
-				<p>Submit what you want built and it will be emailed directly.</p>
-			</div>
+	<div class="desktop-icons" aria-hidden="true">
+		<div class="desktop-icon">My Computer</div>
+		<div class="desktop-icon">Requests</div>
+		<div class="desktop-icon">Mail</div>
+	</div>
+
+	<main class="page">
+		<header class="topbar">
+			<div class="brand">Custom Request Form</div>
 			<a class="back-link" href="index.html">Back</a>
 		</header>
+
+		<section class="hero">
+			<h1>Send A Custom Clothing Request</h1>
+			<p>Fill out the form below and your request details will be emailed directly for review.</p>
+		</section>
 
 		<div class="status" id="statusMessage"></div>
 
@@ -283,7 +401,17 @@
 				<button class="submit-btn" type="submit">Send Request</button>
 			</div>
 		</form>
+
+		<footer class="status-row">
+			<span>Ready</span>
+			<span>Request Window</span>
+		</footer>
 	</main>
+
+	<div class="taskbar" aria-hidden="true">
+		<div class="start-btn">start</div>
+		<div class="task-info">Custom Requests</div>
+	</div>
 
 	<script>
 		(function () {

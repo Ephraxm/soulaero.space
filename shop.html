@@ -6,16 +6,19 @@
 	<title>Shop | Placeholder Store</title>
 	<style>
 		:root {
-			--bg-1: #0f172a;
-			--bg-2: #1d4ed8;
-			--panel: rgba(255, 255, 255, 0.9);
-			--text: #0f172a;
-			--muted: #334155;
-			--accent: #0ea5e9;
-			--accent-dark: #0369a1;
-			--line: rgba(15, 23, 42, 0.12);
-			--radius: 16px;
-			--shadow: 0 12px 30px rgba(15, 23, 42, 0.2);
+			--xp-blue-1: #0a246a;
+			--xp-blue-2: #3a6ea5;
+			--xp-blue-3: #6fa8dc;
+			--xp-win-bg: #ece9d8;
+			--xp-panel: #f4f1e6;
+			--xp-border-dark: #808080;
+			--xp-border-light: #ffffff;
+			--xp-text: #000000;
+			--xp-muted: #2f4f76;
+			--xp-task-a: #1f69d8;
+			--xp-task-b: #0d4fad;
+			--xp-green-a: #4e9a06;
+			--xp-green-b: #2f7600;
 		}
 
 		* {
@@ -25,135 +28,202 @@
 		}
 
 		body {
-			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-			color: var(--text);
+			font-family: Tahoma, Verdana, Arial, sans-serif;
+			color: var(--xp-text);
 			min-height: 100vh;
-			background: radial-gradient(circle at 10% 10%, rgba(14, 165, 233, 0.35), transparent 36%),
-									radial-gradient(circle at 90% 20%, rgba(59, 130, 246, 0.35), transparent 32%),
-									linear-gradient(135deg, var(--bg-1), var(--bg-2));
-			padding: 28px;
+			background: #2e8bc2 url("about-bg.jpg") center center / cover no-repeat fixed;
+			padding: 24px 24px 68px;
 		}
 
-		.shop-shell {
-			max-width: 1120px;
+		.desktop-icons {
+			position: fixed;
+			top: 24px;
+			left: 16px;
+			display: grid;
+			gap: 16px;
+			z-index: 2;
+		}
+
+		.desktop-icon {
+			width: 78px;
+			text-align: center;
+			font-size: 11px;
+			line-height: 1.25;
+			color: #ffffff;
+			text-shadow: 1px 1px 1px #0b2e5f;
+		}
+
+		.desktop-icon::before {
+			content: "";
+			display: block;
+			width: 32px;
+			height: 32px;
+			margin: 0 auto 4px;
+			background: linear-gradient(180deg, #fffbe0, #f4d97d);
+			border: 1px solid rgba(22, 41, 80, 0.75);
+			box-shadow: inset 1px 1px #fff, inset -1px -1px rgba(0, 0, 0, 0.2);
+		}
+
+		.page {
+			position: relative;
+			z-index: 3;
+			max-width: 1080px;
 			margin: 0 auto;
-			background: var(--panel);
-			border: 1px solid var(--line);
-			border-radius: 22px;
-			box-shadow: var(--shadow);
+			background: var(--xp-win-bg);
+			border: 1px solid var(--xp-border-dark);
+			box-shadow: 1px 1px 0 var(--xp-border-light), -1px -1px 0 #b7b3a2, 4px 4px 18px rgba(7, 23, 40, 0.35);
 			overflow: hidden;
-			backdrop-filter: blur(6px);
 		}
 
-		.shop-header {
+		.topbar {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			gap: 16px;
-			padding: 22px 24px;
-			border-bottom: 1px solid var(--line);
-			background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(255, 255, 255, 0.96));
+			padding: 5px 7px;
+			background: linear-gradient(180deg, var(--xp-blue-3) 0%, var(--xp-blue-2) 42%, var(--xp-blue-1) 100%);
+			color: #ffffff;
+			border-bottom: 1px solid #0a2f66;
 		}
 
-		.shop-title h1 {
-			font-size: 1.8rem;
-			line-height: 1.2;
-			margin-bottom: 4px;
+		.brand {
+			font-weight: 700;
+			font-size: 13px;
 			letter-spacing: 0.2px;
+			text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.45);
 		}
 
-		.shop-title p {
-			color: var(--muted);
-			font-size: 0.98rem;
+		.window-actions {
+			display: flex;
+			gap: 4px;
+		}
+
+		.window-actions span {
+			display: inline-block;
+			width: 14px;
+			height: 14px;
+			border: 1px solid rgba(0, 0, 0, 0.35);
+			background: linear-gradient(180deg, #fefefe, #d5dff2);
+		}
+
+		.toolbar {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+			padding: 10px 12px;
+			background: #f8f7f1;
+			border-bottom: 1px solid #c7c2b0;
+		}
+
+		.toolbar-copy h1 {
+			font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+			color: #123f72;
+			line-height: 1.15;
+			margin-bottom: 3px;
+		}
+
+		.toolbar-copy p {
+			font-size: 12px;
+			color: var(--xp-muted);
 		}
 
 		.header-actions {
 			display: flex;
 			align-items: center;
-			gap: 10px;
+			gap: 8px;
 		}
 
-		.pill {
-			border: 0;
-			border: 1px solid var(--line);
-			border-radius: 999px;
-			padding: 8px 14px;
-			font-size: 0.95rem;
-			background: #fff;
-			color: #0f172a;
-			font-weight: 600;
-			cursor: pointer;
+		.checkout-status {
+			display: none;
+			margin: 10px 12px 0;
+			padding: 8px 10px;
+			font-size: 12px;
+			font-weight: 700;
+			border: 1px solid;
+			box-shadow: inset 1px 1px #fff;
 		}
 
-		.pill:hover {
-			background: #f8fafc;
+		.checkout-status.success {
+			display: block;
+			background: #dff6db;
+			border-color: #7bb36d;
+			color: #1f4f1f;
 		}
 
+		.checkout-status.error {
+			display: block;
+			background: #f9dddd;
+			border-color: #c76c6c;
+			color: #6a1f1f;
+		}
+
+		.pill,
 		.back-link {
+			border: 1px solid #8a887d;
+			background: linear-gradient(180deg, #ffffff, #dbd7c7);
+			color: #000;
+			font-size: 12px;
+			font-weight: 700;
+			padding: 7px 12px;
 			text-decoration: none;
-			background: var(--accent);
-			color: #fff;
-			border-radius: 10px;
-			padding: 8px 14px;
-			font-weight: 600;
-			transition: background 0.2s ease;
+			cursor: pointer;
+			box-shadow: inset 1px 1px #fff, inset -1px -1px #b4af9f;
 		}
 
+		.pill:hover,
 		.back-link:hover {
-			background: var(--accent-dark);
+			background: linear-gradient(180deg, #fffde9, #dad5c5);
 		}
 
 		.product-grid {
 			display: grid;
 			grid-template-columns: repeat(4, minmax(0, 1fr));
-			gap: 16px;
-			padding: 20px;
+			gap: 12px;
+			padding: 12px;
 		}
 
 		.product-card {
-			border: 1px solid var(--line);
-			border-radius: var(--radius);
-			overflow: hidden;
-			background: #ffffff;
+			border: 1px solid #8f8c80;
+			background: var(--xp-panel);
 			display: flex;
 			flex-direction: column;
-			min-height: 330px;
+			min-height: 318px;
+			box-shadow: inset 1px 1px #fff, inset -1px -1px #b7b3a5;
 		}
 
 		.product-art {
-			height: 140px;
+			height: 128px;
 			display: grid;
 			place-items: center;
-			color: #0b4a6e;
 			font-weight: 700;
-			letter-spacing: 0.4px;
-			font-size: 0.95rem;
-			border-bottom: 1px solid var(--line);
-			background-size: 180% 180%;
-			animation: hueDrift 8s ease infinite;
+			letter-spacing: 0.25px;
+			font-size: 12px;
+			border-bottom: 1px solid #9db0cb;
+			color: #1b4678;
 		}
 
-		.art-1 { background-image: linear-gradient(130deg, #bfdbfe, #e0f2fe); }
-		.art-2 { background-image: linear-gradient(130deg, #c7d2fe, #ddd6fe); }
-		.art-3 { background-image: linear-gradient(130deg, #fde68a, #fbcfe8); }
-		.art-4 { background-image: linear-gradient(130deg, #bbf7d0, #bae6fd); }
+		.art-1 { background: linear-gradient(180deg, #dcebff, #bfd8fb); }
+		.art-2 { background: linear-gradient(180deg, #e6e7ff, #d2d5ff); }
+		.art-3 { background: linear-gradient(180deg, #fff4d9, #ffe4b6); }
+		.art-4 { background: linear-gradient(180deg, #e0f7de, #caebdd); }
 
 		.product-body {
-			padding: 14px;
+			padding: 10px;
 			display: flex;
 			flex-direction: column;
-			gap: 10px;
+			gap: 8px;
 			height: 100%;
 		}
 
 		.product-name {
-			font-size: 1.05rem;
+			font-size: 13px;
 			font-weight: 700;
+			color: #113f75;
 		}
 
 		.product-description {
-			color: var(--muted);
-			font-size: 0.92rem;
+			color: #24486f;
+			font-size: 12px;
 			line-height: 1.4;
 			min-height: 58px;
 		}
@@ -163,33 +233,28 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			gap: 10px;
+			gap: 8px;
 		}
 
 		.price {
 			font-weight: 700;
-			font-size: 1.05rem;
-			color: #0b4a6e;
+			font-size: 13px;
+			color: #1b4678;
 		}
 
 		.add-btn {
-			border: 0;
-			border-radius: 10px;
-			background: #0f172a;
-			color: #fff;
-			font-weight: 600;
-			padding: 9px 12px;
+			border: 1px solid #8a887d;
+			background: linear-gradient(180deg, #ffffff, #dbd7c7);
+			color: #000;
+			font-weight: 700;
+			font-size: 12px;
+			padding: 7px 10px;
 			cursor: pointer;
-			transition: transform 0.15s ease, background 0.2s ease;
+			box-shadow: inset 1px 1px #fff, inset -1px -1px #b4af9f;
 		}
 
 		.add-btn:hover {
-			background: #111827;
-			transform: translateY(-1px);
-		}
-
-		.add-btn:active {
-			transform: translateY(0);
+			background: linear-gradient(180deg, #fffde9, #dad5c5);
 		}
 
 		.cart-overlay {
@@ -210,10 +275,9 @@
 		.cart-modal {
 			width: min(620px, 100%);
 			max-height: 88vh;
-			background: #ffffff;
-			border-radius: 16px;
-			box-shadow: 0 16px 40px rgba(2, 6, 23, 0.3);
-			border: 1px solid var(--line);
+			background: var(--xp-win-bg);
+			border: 1px solid #7f7c70;
+			box-shadow: 1px 1px 0 #fff, -1px -1px 0 #b7b3a2, 4px 4px 18px rgba(7, 23, 40, 0.35);
 			overflow: hidden;
 			display: flex;
 			flex-direction: column;
@@ -223,37 +287,40 @@
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			padding: 14px 16px;
-			border-bottom: 1px solid var(--line);
+			padding: 6px 8px;
+			background: linear-gradient(180deg, var(--xp-blue-3) 0%, var(--xp-blue-2) 42%, var(--xp-blue-1) 100%);
+			color: #fff;
+			border-bottom: 1px solid #0a2f66;
 		}
 
 		.cart-header h2 {
-			font-size: 1.1rem;
+			font-size: 13px;
 		}
 
 		.close-cart-btn {
-			border: 0;
-			background: #e2e8f0;
-			color: #0f172a;
+			border: 1px solid rgba(0, 0, 0, 0.35);
+			background: linear-gradient(180deg, #fefefe, #d5dff2);
+			color: #000;
 			font-weight: 700;
-			border-radius: 8px;
-			padding: 7px 10px;
+			font-size: 11px;
+			padding: 4px 8px;
 			cursor: pointer;
 		}
 
 		.cart-items {
-			padding: 12px 16px;
+			padding: 10px;
 			overflow: auto;
 			display: flex;
 			flex-direction: column;
-			gap: 10px;
+			gap: 8px;
 			min-height: 140px;
 		}
 
 		.cart-empty {
 			text-align: center;
-			color: var(--muted);
+			color: #355981;
 			padding: 24px 0;
+			font-size: 12px;
 		}
 
 		.cart-item {
@@ -261,19 +328,20 @@
 			grid-template-columns: 1fr auto;
 			gap: 10px;
 			align-items: center;
-			border: 1px solid var(--line);
-			border-radius: 12px;
-			padding: 10px;
+			border: 1px solid #9da9be;
+			background: #f8fbff;
+			padding: 8px;
 		}
 
 		.cart-item-name {
 			font-weight: 700;
+			font-size: 12px;
 			margin-bottom: 4px;
 		}
 
 		.cart-item-price {
-			font-size: 0.92rem;
-			color: var(--muted);
+			font-size: 11px;
+			color: #40658e;
 		}
 
 		.cart-item-actions {
@@ -283,52 +351,86 @@
 		}
 
 		.qty-btn,
-		.remove-btn {
-			border: 0;
-			border-radius: 8px;
-			padding: 7px 9px;
+		.remove-btn,
+		.checkout-btn {
+			border: 1px solid #8a887d;
+			background: linear-gradient(180deg, #ffffff, #dbd7c7);
+			color: #000;
 			font-weight: 700;
+			font-size: 11px;
+			padding: 6px 8px;
 			cursor: pointer;
-		}
-
-		.qty-btn {
-			background: #e2e8f0;
-			color: #0f172a;
+			box-shadow: inset 1px 1px #fff, inset -1px -1px #b4af9f;
 		}
 
 		.remove-btn {
-			background: #fee2e2;
-			color: #991b1b;
+			background: linear-gradient(180deg, #fff2f2, #f6d7d7);
 		}
 
 		.qty-value {
 			min-width: 22px;
 			text-align: center;
 			font-weight: 700;
+			font-size: 12px;
 		}
 
 		.cart-footer {
-			border-top: 1px solid var(--line);
-			padding: 12px 16px 16px;
+			border-top: 1px solid #bfb9a6;
+			padding: 10px;
 			display: flex;
 			flex-direction: column;
 			gap: 10px;
+			background: #e7e3d5;
 		}
 
 		.cart-summary {
 			display: flex;
 			justify-content: space-between;
 			font-weight: 700;
+			font-size: 12px;
 		}
 
-		.checkout-btn {
-			border: 0;
-			border-radius: 10px;
-			padding: 11px 12px;
+		.checkout-fields {
+			display: grid;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+			gap: 8px;
+		}
+
+		.checkout-field {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+		}
+
+		.checkout-field label {
+			font-size: 11px;
 			font-weight: 700;
-			background: var(--accent);
-			color: #fff;
-			cursor: pointer;
+			color: #103962;
+		}
+
+		.checkout-field input {
+			border: 1px solid #8c8a7f;
+			padding: 6px 7px;
+			font-size: 12px;
+			color: #1c3657;
+			background: #ffffff;
+			box-shadow: inset 1px 1px #d7d3c5;
+		}
+
+		.checkout-field input:focus {
+			outline: 1px dotted #1f5ca8;
+			outline-offset: 1px;
+		}
+
+		.checkout-error {
+			display: none;
+			font-size: 11px;
+			font-weight: 700;
+			color: #6a1f1f;
+		}
+
+		.checkout-error.show {
+			display: block;
 		}
 
 		.checkout-btn:disabled {
@@ -336,10 +438,54 @@
 			cursor: not-allowed;
 		}
 
-		@keyframes hueDrift {
-			0% { background-position: 0% 50%; }
-			50% { background-position: 100% 50%; }
-			100% { background-position: 0% 50%; }
+		.status-row {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 8px;
+			padding: 8px 10px;
+			border-top: 1px solid #bfb9a6;
+			background: #e7e3d5;
+			font-size: 11px;
+			color: #2d4566;
+		}
+
+		.taskbar {
+			position: fixed;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			height: 44px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			padding: 0 8px;
+			background: linear-gradient(180deg, var(--xp-task-a), var(--xp-task-b));
+			border-top: 1px solid #6ea8ea;
+			z-index: 6;
+		}
+
+		.start-btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 7px;
+			padding: 6px 14px;
+			border-radius: 17px;
+			border: 1px solid #2f7000;
+			color: #fff;
+			font-style: italic;
+			font-weight: 700;
+			font-size: 15px;
+			background: linear-gradient(180deg, var(--xp-green-a), var(--xp-green-b));
+			box-shadow: inset 1px 1px rgba(255, 255, 255, 0.4);
+		}
+
+		.task-info {
+			background: rgba(255, 255, 255, 0.18);
+			border: 1px solid rgba(255, 255, 255, 0.35);
+			color: #e8f3ff;
+			padding: 4px 10px;
+			font-size: 11px;
 		}
 
 		@media (max-width: 1000px) {
@@ -350,10 +496,10 @@
 
 		@media (max-width: 640px) {
 			body {
-				padding: 14px;
+				padding: 10px 10px 60px;
 			}
 
-			.shop-header {
+			.toolbar {
 				flex-direction: column;
 				align-items: stretch;
 			}
@@ -364,7 +510,6 @@
 
 			.product-grid {
 				grid-template-columns: 1fr;
-				padding: 14px;
 			}
 
 			.product-card {
@@ -383,13 +528,32 @@
 			.cart-item-actions {
 				justify-content: flex-start;
 			}
+
+			.checkout-fields {
+				grid-template-columns: 1fr;
+			}
+
+			.desktop-icons {
+				display: none;
+			}
 		}
 	</style>
 </head>
 <body>
-	<main class="shop-shell">
-		<header class="shop-header">
-			<div class="shop-title">
+	<div class="desktop-icons" aria-hidden="true">
+		<div class="desktop-icon">My Computer</div>
+		<div class="desktop-icon">Shop</div>
+		<div class="desktop-icon">Basket</div>
+	</div>
+
+	<main class="page">
+		<header class="topbar">
+			<div class="brand">Shop</div>
+			<div class="window-actions" aria-hidden="true"><span></span><span></span><span></span></div>
+		</header>
+
+		<section class="toolbar">
+			<div class="toolbar-copy">
 				<h1>Shop</h1>
 				<p>View my items below.</p>
 			</div>
@@ -397,7 +561,9 @@
 				<button class="pill" id="openCartBtn" type="button">Cart: <span id="cartCount">0</span></button>
 				<a class="back-link" href="index.html">Back</a>
 			</div>
-		</header>
+		</section>
+
+		<div class="checkout-status" id="checkoutStatus"></div>
 
 		<section class="product-grid">
 			<article class="product-card">
@@ -448,6 +614,11 @@
 				</div>
 			</article>
 		</section>
+
+		<footer class="status-row">
+			<span>Ready</span>
+			<span>Shop Window</span>
+		</footer>
 	</main>
 
 	<div class="cart-overlay" id="cartOverlay" aria-hidden="true">
@@ -462,9 +633,39 @@
 					<span>Subtotal</span>
 					<span id="cartSubtotal">$0.00</span>
 				</div>
+				<div class="checkout-fields">
+					<div class="checkout-field">
+						<label for="checkoutName">Your Name</label>
+						<input id="checkoutName" type="text" maxlength="80" autocomplete="name" placeholder="Enter your full name">
+					</div>
+					<div class="checkout-field">
+						<label for="checkoutEmail">Your Email</label>
+						<input id="checkoutEmail" type="email" maxlength="120" autocomplete="email" placeholder="Enter your email">
+					</div>
+				</div>
+				<p class="checkout-error" id="checkoutError">Please enter a valid name and email before checkout.</p>
 				<button class="checkout-btn" id="checkoutBtn" type="button" disabled>Checkout</button>
 			</div>
 		</div>
+	</div>
+
+	<form id="orderEmailForm" action="https://formsubmit.co/business.ephram@gmail.com" method="post" style="display: none;">
+		<input type="hidden" name="_subject" value="New Shop Order">
+		<input type="hidden" name="_captcha" value="false">
+		<input type="hidden" name="_template" value="table">
+		<input type="hidden" id="orderCc" name="_cc" value="">
+		<input type="hidden" id="orderEmailField" name="email" value="">
+		<input type="hidden" id="orderNext" name="_next" value="">
+		<input type="hidden" id="orderCustomerName" name="customer_name" value="">
+		<input type="hidden" id="orderCustomerEmail" name="customer_email" value="">
+		<input type="hidden" id="orderItems" name="order_items" value="">
+		<input type="hidden" id="orderTotal" name="order_total" value="">
+		<input type="hidden" id="orderDate" name="order_date" value="">
+	</form>
+
+	<div class="taskbar" aria-hidden="true">
+		<div class="start-btn">start</div>
+		<div class="task-info">Shop</div>
 	</div>
 
 	<script>
@@ -474,10 +675,35 @@
 			var cartItemsEl = document.getElementById('cartItems');
 			var cartSubtotalEl = document.getElementById('cartSubtotal');
 			var checkoutBtn = document.getElementById('checkoutBtn');
+			var checkoutNameEl = document.getElementById('checkoutName');
+			var checkoutEmailEl = document.getElementById('checkoutEmail');
+			var checkoutErrorEl = document.getElementById('checkoutError');
+			var checkoutStatusEl = document.getElementById('checkoutStatus');
 			var openCartBtn = document.getElementById('openCartBtn');
 			var closeCartBtn = document.getElementById('closeCartBtn');
 			var cartOverlay = document.getElementById('cartOverlay');
 			var buttons = document.querySelectorAll('.add-btn');
+			var orderEmailForm = document.getElementById('orderEmailForm');
+			var orderCcEl = document.getElementById('orderCc');
+			var orderEmailFieldEl = document.getElementById('orderEmailField');
+			var orderNextEl = document.getElementById('orderNext');
+			var orderCustomerNameEl = document.getElementById('orderCustomerName');
+			var orderCustomerEmailEl = document.getElementById('orderCustomerEmail');
+			var orderItemsEl = document.getElementById('orderItems');
+			var orderTotalEl = document.getElementById('orderTotal');
+			var orderDateEl = document.getElementById('orderDate');
+			var params = new URLSearchParams(window.location.search);
+			var status = params.get('status');
+
+			orderNextEl.value = window.location.origin + window.location.pathname + '?status=success';
+
+			if (status === 'success') {
+				checkoutStatusEl.className = 'checkout-status success';
+				checkoutStatusEl.textContent = 'Order received. Thank you, your checkout request has been emailed.';
+			} else if (status === 'error') {
+				checkoutStatusEl.className = 'checkout-status error';
+				checkoutStatusEl.textContent = 'Could not send your order email. Please try again.';
+			}
 
 			function formatMoney(value) {
 				return '$' + value.toFixed(2);
@@ -494,6 +720,21 @@
 				});
 
 				return { count: count, subtotal: subtotal, isEmpty: names.length === 0 };
+			}
+
+			function isValidEmail(email) {
+				return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+			}
+
+			function buildOrderItemsText() {
+				var names = Object.keys(cart);
+				if (!names.length) return 'No items';
+
+				return names.map(function (name) {
+					var item = cart[name];
+					var lineTotal = item.qty * item.price;
+					return name + ' x' + item.qty + ' @ ' + formatMoney(item.price) + ' = ' + formatMoney(lineTotal);
+				}).join('\n');
 			}
 
 			function renderCart() {
@@ -593,10 +834,36 @@
 				var stats = getCartStats();
 				if (stats.isEmpty) return;
 
-				alert('Checkout complete. Total: ' + formatMoney(stats.subtotal));
-				cart = {};
-				renderCart();
-				closeCart();
+				var customerName = checkoutNameEl.value.trim();
+				var customerEmail = checkoutEmailEl.value.trim();
+
+				if (!customerName || !isValidEmail(customerEmail)) {
+					checkoutErrorEl.classList.add('show');
+					return;
+				}
+
+				checkoutErrorEl.classList.remove('show');
+				orderCcEl.value = customerEmail;
+				orderEmailFieldEl.value = customerEmail;
+				orderCustomerNameEl.value = customerName;
+				orderCustomerEmailEl.value = customerEmail;
+				orderItemsEl.value = buildOrderItemsText();
+				orderTotalEl.value = formatMoney(stats.subtotal);
+				orderDateEl.value = new Date().toLocaleString();
+
+				orderEmailForm.submit();
+			});
+
+			checkoutNameEl.addEventListener('input', function () {
+				if (checkoutNameEl.value.trim() && isValidEmail(checkoutEmailEl.value.trim())) {
+					checkoutErrorEl.classList.remove('show');
+				}
+			});
+
+			checkoutEmailEl.addEventListener('input', function () {
+				if (checkoutNameEl.value.trim() && isValidEmail(checkoutEmailEl.value.trim())) {
+					checkoutErrorEl.classList.remove('show');
+				}
 			});
 
 			renderCart();

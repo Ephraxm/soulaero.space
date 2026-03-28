@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Custom Requests</title>
+	<style>
+		:root {
+			--bg: #0b1220;
+			--panel: #f8fafc;
+			--text: #0f172a;
+			--muted: #475569;
+			--line: #dbe3ef;
+			--accent: #0ea5e9;
+			--accent-dark: #0369a1;
+			--ok-bg: #dcfce7;
+			--ok-text: #166534;
+			--err-bg: #fee2e2;
+			--err-text: #991b1b;
+		}
+
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			min-height: 100vh;
+			font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+			color: var(--text);
+			background:
+				radial-gradient(circle at 15% 15%, rgba(14, 165, 233, 0.32), transparent 35%),
+				radial-gradient(circle at 80% 10%, rgba(56, 189, 248, 0.22), transparent 30%),
+				linear-gradient(135deg, #020617, var(--bg));
+			padding: 18px;
+		}
+
+		.container {
+			max-width: 920px;
+			margin: 0 auto;
+			background: rgba(248, 250, 252, 0.98);
+			border: 1px solid rgba(148, 163, 184, 0.28);
+			border-radius: 20px;
+			overflow: hidden;
+			box-shadow: 0 20px 45px rgba(2, 6, 23, 0.35);
+		}
+
+		.header {
+			padding: 24px;
+			border-bottom: 1px solid var(--line);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 16px;
+			background: linear-gradient(180deg, #ffffff, #f8fafc);
+		}
+
+		.header h1 {
+			font-size: 1.65rem;
+			margin-bottom: 6px;
+		}
+
+		.header p {
+			color: var(--muted);
+		}
+
+		.back-link {
+			text-decoration: none;
+			background: var(--accent);
+			color: #fff;
+			border-radius: 10px;
+			padding: 10px 14px;
+			font-weight: 700;
+		}
+
+		.back-link:hover {
+			background: var(--accent-dark);
+		}
+
+		.status {
+			margin: 18px 24px 0;
+			padding: 12px 14px;
+			border-radius: 10px;
+			font-weight: 600;
+			display: none;
+		}
+
+		.status.success {
+			display: block;
+			background: var(--ok-bg);
+			color: var(--ok-text);
+			border: 1px solid #86efac;
+		}
+
+		.status.error {
+			display: block;
+			background: var(--err-bg);
+			color: var(--err-text);
+			border: 1px solid #fca5a5;
+		}
+
+		.file-error {
+			color: var(--err-text);
+			font-size: 0.86rem;
+			display: none;
+		}
+
+		.file-error.show {
+			display: block;
+		}
+
+		form {
+			padding: 22px 24px 24px;
+			display: grid;
+			gap: 14px;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+
+		.field {
+			display: flex;
+			flex-direction: column;
+			gap: 7px;
+		}
+
+		.field-full {
+			grid-column: 1 / -1;
+		}
+
+		label {
+			font-weight: 600;
+			color: #1e293b;
+			font-size: 0.95rem;
+		}
+
+		input,
+		select,
+		textarea {
+			border: 1px solid var(--line);
+			border-radius: 10px;
+			padding: 10px 12px;
+			font-size: 0.96rem;
+			color: var(--text);
+			background: #fff;
+		}
+
+		textarea {
+			min-height: 150px;
+			resize: vertical;
+			line-height: 1.4;
+		}
+
+		input:focus,
+		select:focus,
+		textarea:focus {
+			outline: 2px solid rgba(14, 165, 233, 0.35);
+			outline-offset: 1px;
+			border-color: #7dd3fc;
+		}
+
+		.hint {
+			color: var(--muted);
+			font-size: 0.88rem;
+		}
+
+		.actions {
+			grid-column: 1 / -1;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+			margin-top: 2px;
+			padding-top: 10px;
+			border-top: 1px dashed var(--line);
+		}
+
+		.submit-btn {
+			border: 0;
+			border-radius: 10px;
+			background: #0f172a;
+			color: #fff;
+			font-weight: 700;
+			padding: 11px 16px;
+			cursor: pointer;
+		}
+
+		.submit-btn:hover {
+			background: #111827;
+		}
+
+		.hidden-field {
+			position: absolute;
+			left: -10000px;
+			width: 1px;
+			height: 1px;
+			overflow: hidden;
+		}
+
+		@media (max-width: 740px) {
+			body {
+				padding: 10px;
+			}
+
+			.header {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			form {
+				grid-template-columns: 1fr;
+			}
+
+			.actions {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+		}
+	</style>
+</head>
+<body>
+	<main class="container">
+		<header class="header">
+			<div>
+				<h1>Custom Request Form</h1>
+				<p>Submit what you want built and it will be emailed directly.</p>
+			</div>
+			<a class="back-link" href="index.html">Back</a>
+		</header>
+
+		<div class="status" id="statusMessage"></div>
+
+		<form action="https://formsubmit.co/business.ephram@gmail.com" method="post" enctype="multipart/form-data">
+			<input type="hidden" name="_subject" value="New Custom Request Submission">
+			<input type="hidden" name="_captcha" value="false">
+			<input type="hidden" name="_template" value="table">
+			<input type="hidden" name="_next" value="https://ephram.xyz/test/requests.html?status=success">
+			<div class="field">
+				<label for="name">Your Name</label>
+				<input id="name" name="name" type="text" maxlength="80" required>
+			</div>
+
+			<div class="field">
+				<label for="email">Email</label>
+				<input id="email" name="email" type="email" maxlength="120" required>
+			</div>
+
+
+			<div class="field">
+				<label for="requestType">Request Type</label>
+				<select id="requestType" name="request_type" required>
+					<option value="" selected disabled>Select one</option>
+					<option value="Vest">Vest</option>
+					<option value="Jumper">Jumper</option>
+					<option value="T-shirt">T-shirt</option>
+					<option value="Other (write below)">Other</option>
+				</select>
+			</div>
+
+			<div class="field">
+				<label for="budget">Budget</label>
+				<input id="budget" name="budget" type="text" maxlength="30" placeholder="e.g. 30 - 100">
+			</div>
+
+			<div class="field field-full">
+				<label for="details">Request Details</label>
+				<textarea id="details" name="details" required placeholder="Describe exactly what you need, style references, features, and anything important."></textarea>
+			</div>
+
+			<div class="field field-full">
+				<label for="referenceImage">Attach Reference Image (optional)</label>
+				<input id="referenceImage" name="attachment" type="file" accept="image/*" multiple>
+				<p class="hint">Accepted: image files only, up to 3 images.</p>
+				<p class="file-error" id="fileError">Please select up to 3 images only.</p>
+			</div>
+
+			<div class="hidden-field" aria-hidden="true">
+				<label for="website">Leave this field blank</label>
+				<input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+			</div>
+
+			<div class="actions">
+				<p class="hint">You can send your own clothes to be modified.</p>
+				<button class="submit-btn" type="submit">Send Request</button>
+			</div>
+		</form>
+	</main>
+
+	<script>
+		(function () {
+			var statusEl = document.getElementById('statusMessage');
+			var formEl = document.querySelector('form');
+			var fileInputEl = document.getElementById('referenceImage');
+			var fileErrorEl = document.getElementById('fileError');
+			var params = new URLSearchParams(window.location.search);
+			var status = params.get('status');
+
+			if (status === 'success') {
+				statusEl.className = 'status success';
+				statusEl.textContent = 'Request sent successfully. I will get back to you soon.';
+			} else if (status === 'error') {
+				statusEl.className = 'status error';
+				statusEl.textContent = 'Could not send request email. Please try again.';
+			} else if (status === 'invalid') {
+				statusEl.className = 'status error';
+				statusEl.textContent = 'Please complete all required fields before submitting.';
+			}
+
+			formEl.addEventListener('submit', function (event) {
+				var files = fileInputEl.files;
+				if (files && files.length > 3) {
+					event.preventDefault();
+					fileErrorEl.classList.add('show');
+					return;
+				}
+
+				fileErrorEl.classList.remove('show');
+			});
+
+			fileInputEl.addEventListener('change', function () {
+				if (fileInputEl.files && fileInputEl.files.length <= 3) {
+					fileErrorEl.classList.remove('show');
+				}
+			});
+		})();
+	</script>
+</body>
+</html>

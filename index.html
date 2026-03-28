@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>soulaero</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+
+<section class="hero">
+
+  <img src="background.png" class="bg">
+
+
+  <header>
+    <img src="logo.png" class="logo-img reveal" data-delay="0.1">
+
+    <nav>
+      <a href="shop.html" class="reveal" data-delay="0.2">shop</a>
+      <a href="about.html" class="reveal" data-delay="0.3">about</a>
+      <a href="requests.html" class="reveal" data-delay="0.4">requests</a>
+    </nav>
+  </header>
+
+  
+  <p class="hero-text reveal">
+    to request for custom designs, or a rework on your own clothing click request above and follow the steps accordingly.
+  </p>
+
+  <div class="figures-carousel-controls" aria-label="Figure carousel controls">
+    <button type="button" class="figure-arrow figure-arrow-left" aria-label="Show previous figure">&#10094;</button>
+    <button type="button" class="figure-arrow figure-arrow-right" aria-label="Show next figure">&#10095;</button>
+  </div>
+
+ 
+  <div class="figures">
+    <img src="figure2.png" class="figure-item reveal" data-delay="0">
+    <img src="figure3.png" class="figure-item reveal" data-delay="0.5">
+    <img src="figure4.png" class="figure-item reveal" data-delay="1">
+  </div>
+
+</section>
+
+
+
+<section class="footer reveal"></section>
+
+
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+
+  reveals.forEach((el, i) => {
+    const dataDelay = parseFloat(el.dataset.delay);
+    const delay = Number.isFinite(dataDelay) ? dataDelay : i * 0.14;
+    el.style.setProperty('--delay', `${delay}s`);
+  });
+
+  function initRevealOnLoad() {
+    reveals.forEach((el) => {
+      el.classList.add('visible');
+    });
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const el = entry.target;
+      const dataDelay = parseFloat(el.dataset.delay) || 0;
+
+      if (entry.isIntersecting) {
+        clearTimeout(el._revealTimeout);
+        el._revealTimeout = setTimeout(() => {
+          el.classList.add('visible');
+        }, dataDelay * 1000);
+      } else {
+        clearTimeout(el._revealTimeout);
+        el.classList.remove('visible');
+      }
+    });
+  }, {
+    threshold: 0.2,
+  });
+
+  reveals.forEach((el) => observer.observe(el));
+  window.addEventListener('load', initRevealOnLoad);
+
+  const figures = document.querySelector('.figures');
+  const items = Array.from(document.querySelectorAll('.figure-item'));
+  const prevFigureBtn = document.querySelector('.figure-arrow-left');
+  const nextFigureBtn = document.querySelector('.figure-arrow-right');
+  const mobileCarouselQuery = window.matchMedia('(max-width: 768px)');
+
+  if (figures && items.length > 0) {
+    let currentIndex = Math.min(1, items.length - 1);
+    let startX = 0;
+    let isDragging = false;
+    let isAnimating = false;
+
+    const syncFigureRevealState = () => {
+      if (mobileCarouselQuery.matches) {
+        items.forEach((item) => {
+          item.classList.add('visible');
+          observer.unobserve(item);
+        });
+      } else {
+        items.forEach((item) => {
+          observer.observe(item);
+        });
+      }
+    };
+
+    const updateFigurePosition = () => {
+      if (!mobileCarouselQuery.matches) {
+        figures.style.transform = '';
+        return;
+      }
+
+      figures.style.transform = `translateX(-${currentIndex * 100}%)`;
+    };
+
+    const showNextFigure = () => {
+      if (!mobileCarouselQuery.matches || isAnimating) return;
+      isAnimating = true;
+      currentIndex = (currentIndex + 1) % items.length;
+      updateFigurePosition();
+      setTimeout(() => { isAnimating = false; }, 500);
+    };
+
+    const showPreviousFigure = () => {
+      if (!mobileCarouselQuery.matches || isAnimating) return;
+      isAnimating = true;
+      currentIndex = (currentIndex - 1 + items.length) % items.length;
+      updateFigurePosition();
+      setTimeout(() => { isAnimating = false; }, 500);
+    };
+
+    figures.addEventListener('touchstart', (e) => {
+      if (!mobileCarouselQuery.matches) return;
+      startX = e.touches[0].clientX;
+      isDragging = true;
+    }, { passive: true });
+
+    figures.addEventListener('touchmove', (e) => {
+      if (!mobileCarouselQuery.matches || !isDragging) return;
+      e.preventDefault();
+    }, { passive: false });
+
+    figures.addEventListener('touchend', (e) => {
+      if (!mobileCarouselQuery.matches || !isDragging) return;
+
+      const endX = e.changedTouches[0].clientX;
+      const diff = startX - endX;
+
+      if (!isAnimating && Math.abs(diff) > 50) {
+        if (diff > 0) {
+          showNextFigure();
+        } else {
+          showPreviousFigure();
+        }
+      }
+
+      isDragging = false;
+    });
+
+    if (prevFigureBtn) {
+      prevFigureBtn.addEventListener('click', showPreviousFigure);
+    }
+
+    if (nextFigureBtn) {
+      nextFigureBtn.addEventListener('click', showNextFigure);
+    }
+
+    syncFigureRevealState();
+    updateFigurePosition();
+    window.addEventListener('resize', updateFigurePosition);
+    mobileCarouselQuery.addEventListener('change', () => {
+      syncFigureRevealState();
+      updateFigurePosition();
+    });
+  }
+</script>
+  <script src="main.js"></script>
+</body>
+</html>

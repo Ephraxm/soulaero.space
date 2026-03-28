@@ -384,10 +384,11 @@
 			</div>
 
 			<div class="field field-full">
-				<label for="referenceImage">Attach Reference Image (optional)</label>
-				<input id="referenceImage" name="attachment" type="file" accept="image/*" multiple>
-				<p class="hint">Accepted: image files only, up to 3 images.</p>
-				<p class="file-error" id="fileError">Please select up to 3 images only.</p>
+				<label>Attach Reference Images (optional, up to 3)</label>
+				<input id="referenceImage" name="attachment" type="file" accept="image/*">
+				<input name="attachment2" type="file" accept="image/*" style="margin-top:5px">
+				<input name="attachment3" type="file" accept="image/*" style="margin-top:5px">
+				<p class="hint">Accepted: image files only. Use each row for one image.</p>
 			</div>
 
 			<div class="hidden-field" aria-hidden="true">
@@ -415,9 +416,6 @@
 	<script>
 		(function () {
 			var statusEl = document.getElementById('statusMessage');
-			var formEl = document.querySelector('form');
-			var fileInputEl = document.getElementById('referenceImage');
-			var fileErrorEl = document.getElementById('fileError');
 			var params = new URLSearchParams(window.location.search);
 			var status = params.get('status');
 
@@ -432,22 +430,7 @@
 				statusEl.textContent = 'Please complete all required fields before submitting.';
 			}
 
-			formEl.addEventListener('submit', function (event) {
-				var files = fileInputEl.files;
-				if (files && files.length > 3) {
-					event.preventDefault();
-					fileErrorEl.classList.add('show');
-					return;
-				}
 
-				fileErrorEl.classList.remove('show');
-			});
-
-			fileInputEl.addEventListener('change', function () {
-				if (fileInputEl.files && fileInputEl.files.length <= 3) {
-					fileErrorEl.classList.remove('show');
-				}
-			});
 		})();
 	</script>
 </body>

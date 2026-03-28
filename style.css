@@ -163,7 +163,8 @@ nav a:hover {
   right: clamp(12px, 3vw, 36px);
   bottom: clamp(10px, 2vw, 20px);
   margin: 0;
-  font-size: clamp(16px, 1.9vw, 24px);
+  font-size: clamp(18px, 2.2vw, 28px);
+  font-weight: 700;
   color: #000000;
   text-align: right;
 }
@@ -290,7 +291,8 @@ nav a:hover {
   .footer-contact {
     right: 10px;
     bottom: 8px;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 700;
   }
 }
 

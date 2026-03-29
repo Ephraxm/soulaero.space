@@ -53,14 +53,23 @@ header {
 }
 
 nav a {
+  display: inline-block;
   margin-left: 30px;
   text-decoration: none;
   color: #cceff5;
   font-size: 18px;
+  transition: transform 0.2s ease, color 0.2s ease, background-position 0.25s ease;
 }
 
-nav a:hover {
-  color: white;
+nav a.reveal.visible:hover {
+  background: linear-gradient(120deg, #ffffff 0%, #e6e8ec 45%, #b9c0cb 100%);
+  background-size: 220% 220%;
+  animation: navTextGradientShift 1.2s linear infinite;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  transform: translateY(0) scale(1.1);
 }
 
 
@@ -124,6 +133,15 @@ nav a:hover {
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes navTextGradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
   }
 }
 

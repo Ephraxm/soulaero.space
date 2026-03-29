@@ -161,12 +161,34 @@ nav a:hover {
 .footer-contact {
   position: absolute;
   right: clamp(12px, 3vw, 36px);
-  bottom: clamp(10px, 2vw, 20px);
+  bottom: clamp(8px, 1.8vw, 16px);
   margin: 0;
-  font-size: clamp(18px, 2.2vw, 28px);
-  font-weight: 700;
-  color: #000000;
+  font-size: clamp(11px, 1vw, 13px);
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.65);
+  letter-spacing: 0.2px;
   text-align: right;
+}
+
+.footer-copyright {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(8px, 1.8vw, 16px);
+  transform: translateX(-50%);
+  margin: 0;
+  font-size: clamp(11px, 1vw, 13px);
+  color: rgba(0, 0, 0, 0.65);
+  letter-spacing: 0.2px;
+}
+
+.footer-designer {
+  position: absolute;
+  left: clamp(12px, 2vw, 24px);
+  bottom: clamp(8px, 1.8vw, 16px);
+  margin: 0;
+  font-size: clamp(11px, 1vw, 13px);
+  color: rgba(0, 0, 0, 0.65);
+  letter-spacing: 0.2px;
 }
 
 
@@ -291,8 +313,21 @@ nav a:hover {
   .footer-contact {
     right: 10px;
     bottom: 8px;
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 11px;
+    font-weight: 400;
+  }
+
+  .footer-copyright {
+    left: 50%;
+    bottom: 8px;
+    transform: translateX(-50%);
+    font-size: 11px;
+  }
+
+  .footer-designer {
+    left: 10px;
+    bottom: 8px;
+    font-size: 11px;
   }
 }
 

@@ -187,12 +187,11 @@
 			background: var(--xp-panel);
 			display: flex;
 			flex-direction: column;
-			min-height: 318px;
 			box-shadow: inset 1px 1px #fff, inset -1px -1px #b7b3a5;
 		}
 
 		.product-art {
-			height: 128px;
+			height: 300px;
 			display: grid;
 			place-items: center;
 			font-weight: 700;
@@ -211,8 +210,9 @@
 			padding: 10px;
 			display: flex;
 			flex-direction: column;
-			gap: 8px;
-			height: 100%;
+			gap: 4px;
+			height: auto;
+			min-height: 120px;
 		}
 
 		.product-name {
@@ -225,11 +225,11 @@
 			color: #24486f;
 			font-size: 12px;
 			line-height: 1.4;
-			min-height: 58px;
+			min-height: 20px;
 		}
 
 		.product-footer {
-			margin-top: auto;
+			margin-top: 6px;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -513,7 +513,15 @@
 			}
 
 			.product-card {
-				min-height: 300px;
+				min-height: 0;
+			}
+
+			.product-art {
+				height: 235px;
+			}
+
+			.product-body {
+				min-height: 105px;
 			}
 
 			.cart-modal {
@@ -670,6 +678,8 @@
 
 	<script>
 		(function () {
+			var COOLDOWN_MS = 120000;
+			var COOLDOWN_KEY = 'soulaero_email_cooldown_until';
 			var cart = {};
 			var cartCountEl = document.getElementById('cartCount');
 			var cartItemsEl = document.getElementById('cartItems');
@@ -694,6 +704,16 @@
 			var orderDateEl = document.getElementById('orderDate');
 			var params = new URLSearchParams(window.location.search);
 			var status = params.get('status');
+
+			function getCooldownRemainingMs() {
+				var until = Number(window.localStorage.getItem(COOLDOWN_KEY) || '0');
+				if (!Number.isFinite(until)) return 0;
+				return Math.max(0, until - Date.now());
+			}
+
+			function startCooldown() {
+				window.localStorage.setItem(COOLDOWN_KEY, String(Date.now() + COOLDOWN_MS));
+			}
 
 			orderNextEl.value = window.location.origin + window.location.pathname + '?status=success';
 
@@ -834,6 +854,13 @@
 				var stats = getCartStats();
 				if (stats.isEmpty) return;
 
+				var cooldownRemaining = getCooldownRemainingMs();
+				if (cooldownRemaining > 0) {
+					checkoutStatusEl.className = 'checkout-status error';
+					checkoutStatusEl.textContent = 'Please wait ' + Math.ceil(cooldownRemaining / 1000) + 's before sending another email request.';
+					return;
+				}
+
 				var customerName = checkoutNameEl.value.trim();
 				var customerEmail = checkoutEmailEl.value.trim();
 
@@ -850,6 +877,7 @@
 				orderItemsEl.value = buildOrderItemsText();
 				orderTotalEl.value = formatMoney(stats.subtotal);
 				orderDateEl.value = new Date().toLocaleString();
+				startCooldown();
 
 				orderEmailForm.submit();
 			});

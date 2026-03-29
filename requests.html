@@ -416,9 +416,29 @@
 
 	<script>
 		(function () {
+			var COOLDOWN_MS = 120000;
+			var COOLDOWN_KEY = 'soulaero_email_cooldown_until';
+			var formEl = document.querySelector('form');
+			var fileInputs = document.querySelectorAll('input[type="file"]');
 			var statusEl = document.getElementById('statusMessage');
 			var params = new URLSearchParams(window.location.search);
 			var status = params.get('status');
+
+			function getCooldownRemainingMs() {
+				var until = Number(window.localStorage.getItem(COOLDOWN_KEY) || '0');
+				if (!Number.isFinite(until)) return 0;
+				return Math.max(0, until - Date.now());
+			}
+
+			function startCooldown() {
+				window.localStorage.setItem(COOLDOWN_KEY, String(Date.now() + COOLDOWN_MS));
+			}
+
+			function showCooldownMessage() {
+				var seconds = Math.ceil(getCooldownRemainingMs() / 1000);
+				statusEl.className = 'status error';
+				statusEl.textContent = 'Please wait ' + seconds + 's before sending another email request.';
+			}
 
 			if (status === 'success') {
 				statusEl.className = 'status success';
@@ -431,21 +451,32 @@
 				statusEl.textContent = 'Please complete all required fields before submitting.';
 			}
 
+			if (getCooldownRemainingMs() > 0) {
+				showCooldownMessage();
+			}
+
 			formEl.addEventListener('submit', function (event) {
-				var files = fileInputEl.files;
-				if (files && files.length > 3) {
+				if (getCooldownRemainingMs() > 0) {
 					event.preventDefault();
-					fileErrorEl.classList.add('show');
+					showCooldownMessage();
 					return;
 				}
 
-				fileErrorEl.classList.remove('show');
-			});
+				var selectedFiles = 0;
+				fileInputs.forEach(function (inputEl) {
+					if (inputEl.files && inputEl.files.length) {
+						selectedFiles += inputEl.files.length;
+					}
+				});
 
-			fileInputEl.addEventListener('change', function () {
-				if (fileInputEl.files && fileInputEl.files.length <= 3) {
-					fileErrorEl.classList.remove('show');
+				if (selectedFiles > 3) {
+					event.preventDefault();
+					statusEl.className = 'status error';
+					statusEl.textContent = 'Please upload up to 3 images maximum.';
+					return;
 				}
+
+				startCooldown();
 			});
 		})();
 	</script>

@@ -45,20 +45,33 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 30px 60px;
+  padding: clamp(1.5rem, 3vw, 60px);
+  gap: clamp(1rem, 3vw, 30px);
+  flex-wrap: wrap;
 }
 
 .logo-img {
   height: 100px;
 }
 
+nav {
+  display: flex;
+  gap: clamp(0.5rem, 2vw, 30px);
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
 nav a {
   display: inline-block;
-  margin-left: 30px;
+  margin: 0;
   text-decoration: none;
   color: #cceff5;
   font-size: 18px;
+  padding: clamp(0.25rem, 0.5vw, 8px) clamp(0.5rem, 1vw, 12px);
   transition: transform 0.2s ease, color 0.2s ease, background-position 0.25s ease;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
 nav a.reveal.visible:hover {
@@ -83,6 +96,8 @@ nav a.reveal.visible:hover {
   margin-left: auto;
   margin-right: auto;
   color: #002b36;
+  line-height: 1.5;
+  word-wrap: break-word;
 }
 
 .figures-carousel-controls {
@@ -102,9 +117,9 @@ nav a.reveal.visible:hover {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 80px;
+  gap: clamp(2rem, 5vw, 80px);
 
-  padding: 0 5%;
+  padding: 0 clamp(1rem, 3vw, 5%);
 }
 
 .figure-item {
@@ -166,8 +181,12 @@ nav a.reveal.visible:hover {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding-left: clamp(6px, 1.8vw, 24px);
+  padding-left: clamp(12px, 1.8vw, 24px);
   padding-right: clamp(18px, 7vw, 120px);
+  padding-top: clamp(8px, 1vw, 12px);
+  padding-bottom: clamp(8px, 1vw, 12px);
+  gap: clamp(8px, 2vw, 16px);
+  flex-wrap: wrap;
 }
 
 .footer-logo {
@@ -186,6 +205,8 @@ nav a.reveal.visible:hover {
   color: rgba(0, 0, 0, 0.65);
   letter-spacing: 0.2px;
   text-align: right;
+  line-height: 1.4;
+  word-wrap: break-word;
 }
 
 .footer-copyright {
@@ -197,6 +218,8 @@ nav a.reveal.visible:hover {
   font-size: clamp(11px, 1vw, 13px);
   color: rgba(0, 0, 0, 0.65);
   letter-spacing: 0.2px;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
 .footer-designer {
@@ -207,6 +230,8 @@ nav a.reveal.visible:hover {
   font-size: clamp(11px, 1vw, 13px);
   color: rgba(0, 0, 0, 0.65);
   letter-spacing: 0.2px;
+  line-height: 1.4;
+  white-space: nowrap;
 }
 
 
@@ -218,8 +243,8 @@ nav a.reveal.visible:hover {
 
   header {
     flex-direction: column;
-    gap: 8px;
-    padding: 14px 16px;
+    gap: clamp(0.5rem, 2vw, 12px);
+    padding: clamp(0.75rem, 2vw, 18px);
   }
 
   .logo-img {
@@ -233,17 +258,19 @@ nav a.reveal.visible:hover {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: clamp(0.5rem, 2vw, 12px);
   }
 
   nav a {
     margin: 0;
     font-size: 14px;
-    padding: 4px 8px;
+    padding: clamp(0.25rem, 1vw, 8px) clamp(0.5rem, 1.5vw, 12px);
     min-width: 65px;
     text-align: center;
     background: rgba(255,255,255,0.1);
     border-radius: 8px;
+    line-height: 1.5;
+    word-wrap: break-word;
   }
 
   .hero-text {
@@ -329,23 +356,38 @@ nav a.reveal.visible:hover {
   }
 
   .footer-contact {
-    right: 10px;
-    bottom: 8px;
-    font-size: 11px;
+    position: absolute;
+    right: clamp(12px, 3vw, 18px);
+    bottom: clamp(6px, 1.5vw, 8px);
+    font-size: clamp(11px, 2vw, 13px);
     font-weight: 400;
+    text-align: right;
+    margin: 0;
+    line-height: 1.4;
+    word-wrap: break-word;
   }
 
   .footer-copyright {
-    left: 50%;
-    bottom: 8px;
-    transform: translateX(-50%);
-    font-size: 11px;
+    position: absolute;
+    right: clamp(12px, 3vw, 18px);
+    bottom: clamp(24px, 4vw, 32px);
+    transform: none;
+    font-size: clamp(11px, 2vw, 13px);
+    white-space: nowrap;
+    text-align: right;
+    margin: 0;
+    line-height: 1.4;
   }
 
   .footer-designer {
-    left: 10px;
-    bottom: 8px;
-    font-size: 11px;
+    position: absolute;
+    right: clamp(12px, 3vw, 18px);
+    bottom: clamp(42px, 6.5vw, 56px);
+    font-size: clamp(11px, 2vw, 13px);
+    white-space: nowrap;
+    text-align: right;
+    margin: 0;
+    line-height: 1.4;
   }
 }
 

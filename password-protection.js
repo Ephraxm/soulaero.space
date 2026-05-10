@@ -1,5 +1,28 @@
 // Password Protection System
 const CORRECT_PASSWORD = "soulaero"; // Change this to your desired password
+const SESSION_KEY = 'siteAuthenticated';
+const SESSION_SIG = 'siteAuthenticatedSig';
+const AUTH_SECRET = 'soulAeroBlueSecret123!';
+
+function createAuthToken() {
+    return 'tok_' + Math.random().toString(36).slice(2) + '_' + Date.now().toString(36);
+}
+
+function generateAuthSignature(token) {
+    let hash = 0;
+    const text = token + '|' + AUTH_SECRET + '|' + window.location.pathname;
+    for (let i = 0; i < text.length; i++) {
+        hash = ((hash << 5) - hash) + text.charCodeAt(i);
+        hash |= 0;
+    }
+    return btoa((hash >>> 0).toString(16));
+}
+
+function isUserAuthenticated() {
+    const token = sessionStorage.getItem(SESSION_KEY);
+    const sig = sessionStorage.getItem(SESSION_SIG);
+    return typeof token === 'string' && token.startsWith('tok_') && sig === generateAuthSignature(token);
+}
 
 // Hide all content by default (except overlay)
 function hideAllContent() {
@@ -37,7 +60,7 @@ function initPasswordProtection() {
     hideAllContent();
     
     // Check if already authenticated in this session
-    if (sessionStorage.getItem('siteAuthenticated') === 'true') {
+    if (isUserAuthenticated()) {
         showAllContent();
         return;
     }
@@ -56,16 +79,36 @@ function showPasswordOverlay() {
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(-45deg, #1a1a1a, #2d2d2d, #1a1a1a, #2d2d2d);
-        background-size: 400% 400%;
-        animation: gradientShift 15s ease infinite;
+        background: radial-gradient(circle at 20% 20%, rgba(77, 163, 255, 0.25), transparent 22%),
+                    radial-gradient(circle at 80% 25%, rgba(118, 208, 255, 0.2), transparent 20%),
+                    linear-gradient(135deg, #081338 0%, #132d78 30%, #1c4ddb 58%, #0b1f5e 100%);
+        background-size: 300% 300%;
+        animation: gradientShift 18s ease infinite;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
+        overflow: hidden;
         z-index: 9999;
         padding: 40px 20px;
     `;
+
+    // Create centered Arabic title
+    const overlayTitle = document.createElement('div');
+    overlayTitle.textContent = 'روح';
+    overlayTitle.style.cssText = `
+        position: absolute;
+        top: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(255, 255, 255, 0.95);
+        font-size: 32px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-shadow: 0 0 20px rgba(50, 150, 255, 0.35);
+        animation: fadeIn 1s ease-out 0.15s both;
+    `;
+    overlay.appendChild(overlayTitle);
 
     // Create Instagram link at top
     const instagramLink = document.createElement('a');
@@ -76,6 +119,7 @@ function showPasswordOverlay() {
     instagramLink.style.cssText = `
         position: absolute;
         top: 30px;
+        right: 30px;
         color: rgba(255, 255, 255, 0.8);
         text-decoration: none;
         font-size: 14px;
@@ -123,15 +167,15 @@ function showPasswordOverlay() {
         padding: 16px 20px;
         font-size: 16px;
         border: none;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        color: white;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        border-radius: 12px;
+        background: rgba(18, 58, 143, 0.35);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        color: #f3f8ff;
+        box-shadow: 0 14px 40px 0 rgba(12, 38, 113, 0.35);
         outline: none;
         transition: all 0.3s ease;
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(173, 211, 255, 0.22);
     `;
 
     passwordInput.addEventListener('focus', function() {
@@ -171,18 +215,18 @@ function showPasswordOverlay() {
     button.onclick = checkPassword;
     button.style.cssText = `
         width: 120px;
-        padding: 10px 16px;
+        padding: 12px 18px;
         font-size: 14px;
-        font-weight: 600;
+        font-weight: 700;
         border: none;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
-        color: white;
+        border-radius: 12px;
+        background: rgba(123, 180, 255, 0.22);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        color: #eef7ff;
         cursor: pointer;
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        border: 1px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 14px 40px 0 rgba(18, 42, 104, 0.35);
+        border: 1px solid rgba(194, 224, 255, 0.25);
         transition: all 0.3s ease;
     `;
 
@@ -230,8 +274,9 @@ function checkPassword() {
     const errorMsg = document.getElementById('error-msg');
     
     if (input.value === CORRECT_PASSWORD) {
-        // Double-verify authentication
-        sessionStorage.setItem('siteAuthenticated', 'true');
+        const token = createAuthToken();
+        sessionStorage.setItem(SESSION_KEY, token);
+        sessionStorage.setItem(SESSION_SIG, generateAuthSignature(token));
         localStorage.setItem('_auth_check', Date.now().toString());
         removePasswordOverlay();
     } else {
@@ -268,7 +313,7 @@ function removePasswordOverlay() {
 // Monitor for modal deletion or tampering
 function monitorPasswordProtection() {
     const observer = new MutationObserver(() => {
-        const isAuthenticated = sessionStorage.getItem('siteAuthenticated') === 'true';
+        const isAuthenticated = isUserAuthenticated();
         const hasOverlay = document.getElementById('password-overlay') !== null;
         const hasBlocker = document.getElementById('content-blocker') !== null;
         
@@ -292,13 +337,13 @@ function monitorPasswordProtection() {
 
 // Additional protection: disable right-click and common developer tools shortcuts
 document.addEventListener('contextmenu', (e) => {
-    if (sessionStorage.getItem('siteAuthenticated') !== 'true') {
+    if (!isUserAuthenticated()) {
         e.preventDefault();
     }
 });
 
 document.addEventListener('keydown', (e) => {
-    if (sessionStorage.getItem('siteAuthenticated') !== 'true') {
+    if (!isUserAuthenticated()) {
         // Block F12, Ctrl+Shift+I, Ctrl+Shift+C, Ctrl+Shift+J
         if (e.key === 'F12' || 
             (e.ctrlKey && e.shiftKey && e.key === 'I') ||
